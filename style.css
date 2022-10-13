@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#restart {
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+}
+
+.boards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 125px;
+  flex-wrap: wrap;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(7, 0fr);
+  grid-template-rows: repeat(7, 0fr);
+}
+
+.board .square {
+  width: 36px;
+  height: 36px;
+  border: 1px solid black;
+  cursor: crosshair;
+}
