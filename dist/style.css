@@ -39,6 +39,10 @@ body {
   place-items: center;
 }
 
+.square:hover {
+  background-color: rgb(223, 223, 223);
+}
+
 .square.ship {
   background-color: coral;
 }
@@ -51,6 +55,6 @@ body {
   background-color: grey;
 }
 
-.enemy-board button {
+.enemy-board .square:not(.missed):not(.hit) {
   cursor: crosshair;
 }
