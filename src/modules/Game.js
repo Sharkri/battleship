@@ -1,7 +1,7 @@
 import Player from "./Player";
 
 export default class Game {
-  constructor(shipPlacements, name1, name2) {
+  constructor(name1, name2, shipPlacements = []) {
     this.playerOne = Player(name1);
     this.playerTwo = Player(name2, "computer");
     shipPlacements.forEach((ship) => {

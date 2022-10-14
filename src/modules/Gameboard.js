@@ -19,10 +19,15 @@ export default class Gameboard {
     return this.board[y][x];
   }
 
-  placeShip(length, x, y) {
-    if (this.board[y].slice(x).length < length) return;
+  placeShip(length, x, y, isVertical = false) {
+    // verify if position is valid
+    if (isVertical && this.board.slice(y).length < length) return;
+    if (!isVertical && this.board[y].slice(x).length < length) return;
     const ship = Ship(length);
-    for (let i = 0; i < length; i += 1) this.board[y][x + i] = ship;
+    for (let i = 0; i < length; i += 1) {
+      if (isVertical) this.board[y + i][x] = ship;
+      else this.board[y][x + i] = ship;
+    }
   }
 
   receiveAttack(x, y) {
