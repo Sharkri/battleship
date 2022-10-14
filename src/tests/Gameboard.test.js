@@ -50,4 +50,14 @@ it("should report if all ships sunk", () => {
   expect(gameboard.isGameOver()).toBeTruthy();
 });
 
+it("should store valid moves", () => {
+  const gameboard = new Gameboard();
+  gameboard.receiveAttack(6, 5);
+  expect(
+    gameboard.validMoves.every(
+      (validMove) => JSON.stringify(validMove) !== "[6,5]"
+    )
+  ).toBeTruthy();
+});
+
 it.todo("should be able to place a ship vertically");

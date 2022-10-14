@@ -4,9 +4,13 @@ export default class Gameboard {
   constructor() {
     this.board = [];
     this.missedShots = [];
+    this.validMoves = [];
     for (let i = 0; i < 7; i += 1) {
       const row = [];
-      for (let j = 0; j < 7; j += 1) row.push(null);
+      for (let j = 0; j < 7; j += 1) {
+        this.validMoves.push([i, j]);
+        row.push(null);
+      }
       this.board.push(row);
     }
   }
@@ -22,9 +26,14 @@ export default class Gameboard {
   }
 
   receiveAttack(x, y) {
+    this.validMoves = this.validMoves.filter(
+      (move) => JSON.stringify(move) !== `[${x},${y}]`
+    );
     const square = this.at(x, y);
-    if (square) square.hit();
-    else this.missedShots.push([x, y]);
+    if (square) {
+      square.hit();
+    } else this.missedShots.push([x, y]);
+    return { isHit: !!square };
   }
 
   isGameOver() {
