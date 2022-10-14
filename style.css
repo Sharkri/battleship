@@ -26,15 +26,28 @@ body {
   flex-wrap: wrap;
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(7, 0fr);
-  grid-template-rows: repeat(7, 0fr);
+.column {
+  display: flex;
 }
 
-.board .square {
+.square {
   width: 36px;
   height: 36px;
   border: 1px solid black;
+  display: grid;
+  place-items: center;
+}
+.square.ship {
+  background-color: coral;
+}
+.square.hit {
+  background-color: red;
+}
+
+.square.missed {
+  background-color: grey;
+}
+
+.enemy-board button {
   cursor: crosshair;
 }
