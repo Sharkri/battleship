@@ -4,12 +4,12 @@ import displayController from "./displayController";
 const display = displayController();
 const restart = document.querySelector("#restart");
 const enemyBoard = document.querySelector(".enemy-board");
-const playerBoard = document.querySelector(".player-board");
 let game = new Game();
+display.initialize(game.playerOne.gameboard, game.playerTwo.gameboard);
+
 restart.addEventListener("click", () => {
   game = new Game();
-
-  display.restart(game.playerOne.gameboard, game.playerTwo.gameboard);
+  display.initialize(game.playerOne.gameboard, game.playerTwo.gameboard);
 });
 
 enemyBoard.addEventListener("click", (e) => {
@@ -23,9 +23,8 @@ enemyBoard.addEventListener("click", (e) => {
   if (playerTwo.gameboard.isGameOver() || playerOne.gameboard.isGameOver())
     return;
 
-  const column = e.target.parentNode;
-  const x = [...column.children].indexOf(e.target);
-  const y = [...enemyBoard.children].indexOf(column);
+  const x = e.target.getAttribute("data-coord-x");
+  const y = e.target.getAttribute("data-coord-y");
 
   const attack = playerOne.attack(playerTwo, x, y);
   e.target.classList.add(attack.isHit ? "hit" : "missed");
@@ -37,7 +36,9 @@ enemyBoard.addEventListener("click", (e) => {
 
   // make ai move after player move
   const AIMove = playerTwo.makeRandomMove(playerOne);
-  const grid = playerBoard.children[AIMove.y].children[AIMove.x];
+  const grid = document.querySelector(
+    `.player-board .square[data-coord-x="${AIMove.x}"][data-coord-y="${AIMove.y}"]`
+  );
   grid.classList.add(AIMove.isHit ? "hit" : "missed");
 
   if (playerOne.gameboard.isGameOver()) {

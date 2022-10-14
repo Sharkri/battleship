@@ -26,8 +26,9 @@ body {
   flex-wrap: wrap;
 }
 
-.column {
-  display: flex;
+.board {
+  display: grid;
+  grid-template: repeat(7, 1fr) / repeat(7, 1fr);
 }
 
 .square {
@@ -37,9 +38,11 @@ body {
   display: grid;
   place-items: center;
 }
+
 .square.ship {
   background-color: coral;
 }
+
 .square.hit {
   background-color: red;
 }
