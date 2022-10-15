@@ -4,8 +4,8 @@ export default function displayController() {
     boards.forEach((board) => {
       // Clear the board
       board.textContent = "";
-      for (let y = 0; y < 7; y += 1)
-        for (let x = 0; x < 7; x += 1) {
+      for (let y = 0; y < 10; y += 1)
+        for (let x = 0; x < 10; x += 1) {
           const square = document.createElement("button");
           square.classList.add("square");
           square.setAttribute("data-coord-x", x);

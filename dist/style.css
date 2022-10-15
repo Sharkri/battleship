@@ -16,6 +16,7 @@ body {
   padding: 12px;
   border: none;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .boards {
@@ -28,7 +29,7 @@ body {
 
 .board {
   display: grid;
-  grid-template: repeat(7, 1fr) / repeat(7, 1fr);
+  grid-template: repeat(10, 1fr) / repeat(10, 1fr);
 }
 
 .square {
