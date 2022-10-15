@@ -5,9 +5,9 @@ export default class Gameboard {
     this.board = [];
     this.missedShots = [];
     this.validMoves = [];
-    for (let i = 0; i < 7; i += 1) {
+    for (let i = 0; i < 10; i += 1) {
       const row = [];
-      for (let j = 0; j < 7; j += 1) {
+      for (let j = 0; j < 10; j += 1) {
         this.validMoves.push([i, j]);
         row.push(null);
       }
@@ -38,12 +38,12 @@ export default class Gameboard {
     if (square) {
       square.hit();
     } else this.missedShots.push([x, y]);
-    return { isHit: !!square };
+    return { isHit: square };
   }
 
   isGameOver() {
-    for (let y = 0; y < 7; y += 1) {
-      for (let x = 0; x < 7; x += 1) {
+    for (let y = 0; y < 10; y += 1) {
+      for (let x = 0; x < 10; x += 1) {
         const ship = this.at(x, y);
         if (ship && !ship.isSunk()) return false;
       }

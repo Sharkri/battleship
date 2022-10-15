@@ -5,8 +5,8 @@ export default class Game {
     this.playerOne = Player(name1);
     this.playerTwo = Player(name2, "computer");
     shipPlacements.forEach((ship) => {
-      const { length, x, y } = ship;
-      this.playerOne.gameboard.placeShip(length, x, y);
+      const { length, x, y, isVertical } = ship;
+      this.playerOne.gameboard.placeShip(length, x, y, isVertical);
     });
     // add random ship placement soon
     for (let i = 2; i < 6; i += 1) this.playerTwo.gameboard.placeShip(i, 1, i);

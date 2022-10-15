@@ -2,27 +2,27 @@ import Gameboard from "../modules/Gameboard";
 
 it("should create a gameboard", () => {
   const gameboard = new Gameboard();
-  // expect row and column to be 7x7
-  expect(gameboard.board.length).toBe(7);
-  expect(gameboard.board[0].length).toBe(7);
+  // expect row and column to be 10x10
+  expect(gameboard.board.length).toBe(10);
+  expect(gameboard.board[0].length).toBe(10);
 });
 
 it("should place a ship", () => {
   const gameboard = new Gameboard();
   const length = 3;
-  const x = 0;
+  const x = 7;
   const y = 4;
   gameboard.placeShip(length, x, y);
-  expect(gameboard.at(2, 4)).toBeTruthy();
+  expect(gameboard.at(8, 4)).toBeTruthy();
 });
 
 it("should not allow invalid placement of a ship", () => {
   const gameboard = new Gameboard();
-  const length = 6;
-  const x = 0;
+  const length = 8;
+  const x = 3;
   const y = 0;
   gameboard.placeShip(length, x, y);
-  expect(gameboard.at(6, 0)).toBeFalsy();
+  expect(gameboard.at(3, 0)).toBeFalsy();
   // vertical check aswell
   gameboard.placeShip(6, 0, 5, true);
   expect(gameboard.at(0, 5)).toBeFalsy();
@@ -47,9 +47,10 @@ it("should record missed shots", () => {
 
 it("should report if all ships sunk", () => {
   const gameboard = new Gameboard();
-  gameboard.placeShip(2, 0, 0);
-  gameboard.receiveAttack(0, 0);
-  gameboard.receiveAttack(1, 0);
+  gameboard.placeShip(2, 8, 0);
+  expect(gameboard.isGameOver()).toBeFalsy();
+  gameboard.receiveAttack(8, 0);
+  gameboard.receiveAttack(9, 0);
   expect(gameboard.isGameOver()).toBeTruthy();
 });
 

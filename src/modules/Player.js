@@ -11,6 +11,7 @@ export default function Player(name, type = "player") {
     const { isHit } = enemy.gameboard.receiveAttack(x, y);
     return { isHit, x, y };
   }
+
   if (type === "computer") return { name, gameboard, makeRandomMove };
   return { name, gameboard, attack };
 }
