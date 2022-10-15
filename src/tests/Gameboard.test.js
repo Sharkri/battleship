@@ -21,11 +21,17 @@ it("should not allow invalid placement of a ship", () => {
   const length = 8;
   const x = 3;
   const y = 0;
-  gameboard.placeShip(length, x, y);
-  expect(gameboard.at(3, 0)).toBeFalsy();
-  // vertical check aswell
-  gameboard.placeShip(6, 0, 5, true);
-  expect(gameboard.at(0, 5)).toBeFalsy();
+  expect(gameboard.isValidPosition(length, x, y)).toBeFalsy();
+  expect(gameboard.isValidPosition(5, 4, 3)).toBeTruthy();
+  // vertical check
+  expect(gameboard.isValidPosition(3, 0, 8, true)).toBeFalsy();
+  expect(gameboard.isValidPosition(4, 3, 4, true)).toBeTruthy();
+
+  gameboard.placeShip(3, 5, 0);
+  expect(gameboard.isValidPosition(2, 4, 0)).toBeFalsy();
+  // vertical check again
+  gameboard.placeShip(3, 0, 4, true);
+  expect(gameboard.isValidPosition(2, 0, 3, true)).toBeFalsy();
 });
 
 it("should receive attack correctly", () => {

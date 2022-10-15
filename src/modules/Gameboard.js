@@ -19,10 +19,23 @@ export default class Gameboard {
     return this.board[y][x];
   }
 
+  isValidPosition(length, x, y, isVertical = false) {
+    // dont allow ship to go off the board
+    if (isVertical && this.board.slice(y).length < length) return false;
+    if (!isVertical && this.board[y].slice(x).length < length) return false;
+    // dont allow ships to be placed where a ship already is
+    const slicedRow = this.board[y].slice(x, x + length);
+    const column = this.board.slice(y, y + length);
+
+    if (!isVertical && slicedRow.some((square) => square)) return false;
+    if (isVertical && column.some((row) => row[x])) return false;
+
+    return true;
+  }
+
   placeShip(length, x, y, isVertical = false) {
     // verify if position is valid
-    if (isVertical && this.board.slice(y).length < length) return;
-    if (!isVertical && this.board[y].slice(x).length < length) return;
+    if (!this.isValidPosition(length, x, y, isVertical)) return;
     const ship = Ship(length);
     for (let i = 0; i < length; i += 1) {
       if (isVertical) this.board[y + i][x] = ship;
