@@ -9,10 +9,45 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="boards">
-      <div class="board player-board"></div>
-      <div class="board enemy-board"></div>
-    </div>
-    <button id="restart">Restart</button>
+    <header class="header">BATTLESHIP</header>
+
+    <main>
+      <div class="boards">
+        <div class="player-board-container">
+          <div class="board player-board"></div>
+          <div class="ships">
+            <div class="destroyer" draggable="true" data-vertical="false">
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div class="submarine" draggable="true" data-vertical="true">
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div class="cruiser" draggable="true" data-vertical="false">
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div class="battleship" draggable="true" data-vertical="true">
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div class="carrier" draggable="true" data-vertical="false">
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+          </div>
+        </div>
+        <div class="board enemy-board"></div>
+      </div>
+      <button id="restart">Restart</button>
+    </main>
   </body>
 </html>
