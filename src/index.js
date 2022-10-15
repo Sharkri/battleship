@@ -3,14 +3,14 @@ import displayController from "./displayController";
 
 const display = displayController();
 
-const restart = document.querySelector("#restart");
+const startGame = document.querySelector("#start-game");
 const enemyBoard = document.querySelector(".enemy-board");
 const playerBoard = document.querySelector(".player-board");
 let draggedShip = null;
 let game = new Game();
 display.initialize(game.playerOne.gameboard, game.playerTwo.gameboard);
 
-restart.addEventListener("click", () => {
+startGame.addEventListener("click", () => {
   const name1 = null;
   const name2 = null;
 
@@ -60,8 +60,8 @@ playerBoard.addEventListener("drop", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
   const isVertical = draggedShip.dataset.vertical === "true";
   playerOne.gameboard.placeShip(draggedShip.children.length, x, y, isVertical);
-
   display.initialize(playerOne.gameboard);
+  draggedShip.parentNode.classList.add("hidden");
 });
 
 playerBoard.addEventListener("dragover", (e) => {
@@ -80,9 +80,17 @@ playerBoard.addEventListener("dragleave", (e) => {
   e.target.classList.remove("invalid");
 });
 
-const ships = document.querySelectorAll(".ships > div");
+const ships = document.querySelectorAll(".ship");
 ships.forEach((ship) =>
   ship.addEventListener("dragstart", (e) => {
     draggedShip = e.target;
   })
 );
+const rotateBtns = document.querySelectorAll(".rotate");
+rotateBtns.forEach((rotateBtn) => {
+  rotateBtn.addEventListener("click", (e) => {
+    const ship = e.target.closest("svg").previousElementSibling;
+    const isVertical = ship.getAttribute("data-vertical") === "true";
+    ship.setAttribute("data-vertical", !isVertical);
+  });
+});

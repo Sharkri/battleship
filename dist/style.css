@@ -16,6 +16,16 @@ body {
   grid-template-rows: auto 1fr;
 }
 
+svg {
+  min-width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+svg:hover > path {
+  fill: #202020;
+}
+
 header {
   display: flex;
   justify-content: center;
@@ -30,7 +40,7 @@ main {
   flex-direction: column;
 }
 
-#restart {
+#start-game {
   padding: 12px;
   border: none;
   border-radius: 12px;
@@ -57,13 +67,23 @@ main {
   margin-top: 7px;
 }
 
-.ships > div {
+.ship-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ship {
   width: min-content;
   display: flex;
 }
 
-.ships > div[data-vertical="true"] {
+.ship[data-vertical="true"] {
   display: block;
+}
+
+.ship-container.hidden {
+  display: none;
 }
 
 .part {
@@ -109,7 +129,7 @@ main {
 }
 
 .header {
-  font-size: 5.5rem;
+  font-size: 4.5rem;
   font-family: "Wargate";
 }
 
