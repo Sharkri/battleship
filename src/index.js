@@ -6,8 +6,9 @@ const ships = document.querySelectorAll(".ship");
 const startGame = document.querySelector("#start-game");
 const enemyBoard = document.querySelector(".enemy-board");
 const playerBoard = document.querySelector(".player-board");
+const playAgain = document.querySelector(".play-again");
 let draggedShip;
-const game = new Game();
+let game = new Game();
 display.render(game.playerOne.gameboard, game.playerTwo.gameboard);
 startGame.addEventListener("click", () => {
   startGame.disabled = true;
@@ -19,25 +20,19 @@ enemyBoard.addEventListener("click", (e) => {
   // if already marked
   if (e.target.classList.length > 1) return;
 
-  // dont let player click after game over
-  if (playerTwo.gameboard.isGameOver() || playerOne.gameboard.isGameOver())
-    return;
-
   const x = +e.target.getAttribute("data-coord-x");
   const y = +e.target.getAttribute("data-coord-y");
 
   playerOne.attack(playerTwo, x, y);
   display.renderBoard(playerTwo.gameboard, 1);
   if (playerTwo.gameboard.isGameOver()) {
-    // handle epic win
+    display.endGame(true);
     return;
   }
   // make ai move after player move
   playerTwo.makeRandomMove(playerOne);
   display.renderBoard(playerOne.gameboard, 0);
-  if (playerOne.gameboard.isGameOver()) {
-    // handle lose
-  }
+  if (playerOne.gameboard.isGameOver()) display.endGame(false);
 });
 
 // Drag and drop ships
@@ -110,3 +105,8 @@ rotateBtns.forEach((rotateBtn) =>
     ship.setAttribute("data-vertical", !isVertical);
   })
 );
+
+playAgain.addEventListener("click", () => {
+  game = new Game();
+  display.restart(game.playerOne.gameboard, game.playerTwo.gameboard);
+});

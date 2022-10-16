@@ -1,6 +1,8 @@
 export default function displayController() {
   const boards = document.querySelectorAll(".board");
-
+  const modal = document.querySelector(".modal");
+  const enemyBoard = document.querySelector(".enemy-board");
+  const gameEndedText = document.querySelector(".game-ended-text");
   function renderBoard(board, boardIndex) {
     // Clear the board
     boards[boardIndex].textContent = "";
@@ -29,5 +31,23 @@ export default function displayController() {
     }
   }
 
-  return { render, renderBoard };
+  function restart(...gameboards) {
+    render(...gameboards);
+    // unhide the ships to place on board
+    const hiddenShips = document.querySelectorAll(".hidden");
+    hiddenShips.forEach((ship) => {
+      // by default ship is horizontal
+      ship.firstElementChild.setAttribute("data-vertical", "false");
+      ship.classList.remove("hidden");
+      modal.classList.remove("open");
+      enemyBoard.classList.remove("active");
+    });
+  }
+
+  function endGame(isWin) {
+    modal.classList.add("open");
+    gameEndedText.textContent = isWin ? "You won" : "You lost";
+  }
+
+  return { render, renderBoard, restart, endGame };
 }
