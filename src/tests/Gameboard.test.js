@@ -84,3 +84,16 @@ it("should be able to place a ship vertically", () => {
   expect(gameboard.at(6, 4)).toBeTruthy();
   expect(gameboard.at(6, 5)).toBeFalsy();
 });
+
+it("should check if isHit()", () => {
+  const gameboard = new Gameboard();
+  expect(gameboard.isHit(6, 5)).toBeFalsy();
+  gameboard.placeShip(2, 6, 5);
+  gameboard.receiveAttack(6, 5);
+  expect(gameboard.isHit(6, 5)).toBeTruthy();
+});
+
+it("should check if isMiss()", () => {
+  const gameboard = new Gameboard();
+  expect(gameboard.isMiss(6, 5)).toBeFalsy();
+});

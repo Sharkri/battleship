@@ -34,6 +34,18 @@ export default class Gameboard {
     return true;
   }
 
+  isHit(x, y) {
+    return this.hitShots.find(
+      (shot) => JSON.stringify(shot) === JSON.stringify([x, y])
+    );
+  }
+
+  isMiss(x, y) {
+    return this.missedShots.find(
+      (shot) => JSON.stringify(shot) === JSON.stringify([x, y])
+    );
+  }
+
   placeShip(length, x, y, isVertical = false) {
     // verify if position is valid
     if (!this.isValidPosition(length, x, y, isVertical)) return;
