@@ -8,8 +8,8 @@ export default function Player(name, type = "player") {
   function makeRandomMove(enemy) {
     const { validMoves } = enemy.gameboard;
     const [x, y] = validMoves[Math.floor(Math.random() * validMoves.length)];
-    const { isHit } = enemy.gameboard.receiveAttack(x, y);
-    return { isHit, x, y };
+    const { square } = enemy.gameboard.receiveAttack(x, y);
+    return { square, x, y };
   }
 
   if (type === "computer") return { name, gameboard, makeRandomMove };
