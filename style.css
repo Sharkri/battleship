@@ -3,6 +3,11 @@
   src: url(fonts/NotoSans-Regular.ttf);
 }
 
+@font-face {
+  font-family: "Wargate";
+  src: url(fonts/WargateNormalRegular-RpXJe.otf);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +19,7 @@ body {
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
+  --block-size: 40px;
 }
 
 svg {
@@ -42,9 +48,16 @@ main {
 
 #start-game {
   padding: 12px;
-  border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+#start-game:not(:disabled):hover {
+  background-color: #dddddd;
+}
+
+#start-game:disabled {
+  cursor: default;
 }
 
 .boards {
@@ -58,6 +71,7 @@ main {
 .board {
   display: grid;
   grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+  background-color: #f0f0f0;
 }
 
 .ships {
@@ -87,18 +101,27 @@ main {
 }
 
 .part {
-  width: 36px;
-  height: 36px;
-  background-color: coral;
-  border: 1px solid black;
+  width: var(--block-size);
+  height: var(--block-size);
+  background-color: grey;
+  border: 4px solid #464646;
 }
 
 .square {
-  width: 36px;
-  height: 36px;
-  border: 1px solid black;
+  width: var(--block-size);
+  height: var(--block-size);
+  border: 1px solid rgb(31, 43, 68);
   display: grid;
   place-items: center;
+}
+
+.enemy-board:not(.active) > .square {
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.enemy-board.active > .square:not(.hit, .missed) {
+  cursor: crosshair;
 }
 
 .enemy-board .square:not(.hit, .missed):hover {
@@ -109,31 +132,47 @@ main {
 }
 
 .square.ship {
-  background-color: coral;
+  background-color: grey;
+  border: 4px solid #464646;
 }
 
-.square.hit {
+.square {
+  position: relative;
+}
+
+.square.missed::after,
+.square.hit::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -4px;
+  border-radius: 50%;
+  background-color: #000000a9;
+}
+
+.square.hit::after {
   background-color: red;
 }
 
-.square.missed {
+.enemy-board .square.hit,
+.enemy-board .square.miss {
+  cursor: not-allowed;
+}
+
+.square.sunk {
   background-color: grey;
+  border: 4px solid #464646;
+  opacity: 0.66;
 }
 
 .player-board .square.invalid {
   background-color: red;
 }
 
-.enemy-board .square:not(.missed):not(.hit) {
-  cursor: crosshair;
-}
-
 .header {
   font-size: 4.5rem;
   font-family: "Wargate";
-}
-
-@font-face {
-  font-family: "Wargate";
-  src: url(fonts/WargateNormalRegular-RpXJe.otf);
 }
