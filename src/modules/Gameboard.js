@@ -4,6 +4,7 @@ export default class Gameboard {
   constructor() {
     this.board = [];
     this.missedShots = [];
+    this.hitShots = [];
     this.validMoves = [];
     for (let i = 0; i < 10; i += 1) {
       const row = [];
@@ -50,8 +51,9 @@ export default class Gameboard {
     const square = this.at(x, y);
     if (square) {
       square.hit();
+      this.hitShots.push([x, y]);
     } else this.missedShots.push([x, y]);
-    return { isHit: square };
+    return { square };
   }
 
   isGameOver() {

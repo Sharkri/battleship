@@ -51,6 +51,13 @@ it("should record missed shots", () => {
   expect(gameboard.missedShots[0]).toEqual([5, 2]);
 });
 
+it("should record hit shots", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(1, 5, 2);
+  gameboard.receiveAttack(5, 2);
+  expect(gameboard.hitShots[0]).toEqual([5, 2]);
+});
+
 it("should report if all ships sunk", () => {
   const gameboard = new Gameboard();
   gameboard.placeShip(2, 8, 0);
