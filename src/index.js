@@ -9,7 +9,6 @@ const playerBoard = document.querySelector(".player-board");
 let draggedShip;
 const game = new Game();
 display.render(game.playerOne.gameboard, game.playerTwo.gameboard);
-
 startGame.addEventListener("click", () => {
   startGame.disabled = true;
   enemyBoard.classList.add("active");
@@ -33,7 +32,6 @@ enemyBoard.addEventListener("click", (e) => {
     // handle epic win
     return;
   }
-
   // make ai move after player move
   playerTwo.makeRandomMove(playerOne);
   display.renderBoard(playerOne.gameboard, 0);
@@ -71,15 +69,31 @@ playerBoard.addEventListener("dragover", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
   const { length } = draggedShip.children;
   const isVertical = draggedShip.dataset.vertical === "true";
+  const { gameboard } = game.playerOne;
 
-  if (game.playerOne.gameboard.isValidPosition(length, x, y, isVertical)) {
-    e.target.classList.add("drag-over");
-  } else e.target.classList.add("invalid");
+  if (!gameboard.isValidPosition(length, x, y, isVertical)) {
+    e.target.classList.add("invalid");
+    return;
+  }
+  // preview the where the ship will be placed
+  for (let i = 0; i < length; i += 1) {
+    // add a "preview-ship" class to preview the squares ship will be placed in
+    // if isVertical increment y axis by 1, else increment x-axis
+    if (isVertical)
+      document
+        .querySelector(`[data-coord-y="${[y + i]}"][data-coord-x="${[x]}"]`)
+        .classList.add("preview-ship");
+    else
+      document
+        .querySelector(`[data-coord-y="${[y]}"][data-coord-x="${[x + i]}"]`)
+        .classList.add("preview-ship");
+  }
 });
 
 playerBoard.addEventListener("dragleave", (e) => {
   e.preventDefault();
-  e.target.classList.remove("drag-over");
+  const dragOver = document.getElementsByClassName("preview-ship");
+  [...dragOver].forEach((square) => square.classList.remove("preview-ship"));
   e.target.classList.remove("invalid");
 });
 
