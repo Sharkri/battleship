@@ -56,6 +56,21 @@ export default class Gameboard {
     }
   }
 
+  randomizeShips(...ships) {
+    ships.forEach((ship) => {
+      const validPlacements = [];
+      const isVertical = Math.round(Math.random());
+      for (let y = 0; y < this.board.length; y += 1)
+        for (let x = 0; x < this.board.length; x += 1)
+          if (this.isValidPosition(ship.length, x, y, isVertical)) {
+            validPlacements.push([x, y]);
+          }
+      const [x, y] =
+        validPlacements[Math.floor(Math.random() * validPlacements.length)];
+      this.placeShip(ship.length, x, y, isVertical);
+    });
+  }
+
   receiveAttack(x, y) {
     this.validMoves = this.validMoves.filter(
       (move) => JSON.stringify(move) !== `[${x},${y}]`

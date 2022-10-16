@@ -1,14 +1,16 @@
 import Player from "./Player";
 
 export default class Game {
-  constructor(name1, name2, shipPlacements = []) {
+  constructor(name1, name2) {
     this.playerOne = Player(name1);
     this.playerTwo = Player(name2, "computer");
-    shipPlacements.forEach((ship) => {
-      const { length, x, y, isVertical } = ship;
-      this.playerOne.gameboard.placeShip(length, x, y, isVertical);
-    });
     // add random ship placement soon
-    for (let i = 2; i < 6; i += 1) this.playerTwo.gameboard.placeShip(i, 1, i);
+    this.playerTwo.gameboard.randomizeShips(
+      { length: 5 },
+      { length: 4 },
+      { length: 3 },
+      { length: 3 },
+      { length: 2 }
+    );
   }
 }
