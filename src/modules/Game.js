@@ -5,7 +5,8 @@ export default class Game {
     this.playerOne = Player(name1);
     this.playerTwo = Player(name2, "computer");
     // add random ship placement soon
-    this.playerTwo.gameboard.randomizeShips(
+    const playerTwoBoard = this.playerTwo.getBoard();
+    playerTwoBoard.randomizeShips(
       { length: 5 },
       { length: 4 },
       { length: 3 },

@@ -1,17 +1,26 @@
 import Gameboard from "./Gameboard";
 
 export default function Player(name, type = "player") {
-  const gameboard = new Gameboard();
+  let gameboard = new Gameboard();
 
-  const attack = (enemy, x, y) => enemy.gameboard.receiveAttack(x, y);
+  function attack(enemy, x, y) {
+    const enemyBoard = enemy.getBoard();
+    enemyBoard.receiveAttack(x, y);
+  }
+  function createNewBoard() {
+    gameboard = new Gameboard();
+  }
 
   function makeRandomMove(enemy) {
-    const { validMoves } = enemy.gameboard;
+    const enemyBoard = enemy.getBoard();
+    const { validMoves } = enemyBoard;
     const [x, y] = validMoves[Math.floor(Math.random() * validMoves.length)];
-    const { square } = enemy.gameboard.receiveAttack(x, y);
+    const { square } = enemyBoard.receiveAttack(x, y);
     return { square, x, y };
   }
 
-  if (type === "computer") return { name, gameboard, makeRandomMove };
-  return { name, gameboard, attack };
+  const getBoard = () => gameboard;
+
+  if (type === "computer") return { name, getBoard, makeRandomMove };
+  return { name, getBoard, createNewBoard, attack };
 }

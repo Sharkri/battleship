@@ -2,6 +2,7 @@ export default function displayController() {
   const gameEndedModal = document.querySelector(".modal");
   const gameEndedText = document.querySelector(".game-ended-text");
   const placeShipModal = document.querySelector(".place-ship-modal");
+  const ships = document.getElementsByClassName("ship-container");
 
   function renderBoard(board, className) {
     const domBoard = document.querySelector(`.${className}`);
@@ -30,15 +31,18 @@ export default function displayController() {
     players.forEach((player) => renderBoard(player.board, player.className));
   }
 
-  function restart(...players) {
-    render(...players);
-    const hiddenShips = document.querySelectorAll(".hidden");
-    hiddenShips.forEach((ship) => {
+  function toggleShips(isVisible) {
+    [...ships].forEach((ship) => {
       // Set ship to horizontal by default.
       ship.firstElementChild.setAttribute("data-vertical", "false");
-      // Unhide the ship
-      ship.classList.remove("hidden");
+      // unhide ship
+      if (isVisible) ship.classList.remove("hidden");
+      else ship.classList.add("hidden");
     });
+  }
+  function restart(...players) {
+    render(...players);
+    toggleShips(true);
     gameEndedModal.classList.remove("open");
     placeShipModal.classList.add("open");
   }
@@ -53,5 +57,12 @@ export default function displayController() {
     gameEndedText.textContent = text;
   }
 
-  return { render, renderBoard, restart, endGame, startGame };
+  return {
+    render,
+    renderBoard,
+    restart,
+    endGame,
+    startGame,
+    toggleShips,
+  };
 }

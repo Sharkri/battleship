@@ -7,21 +7,28 @@ const startGame = document.querySelector("#start-game");
 const enemyBoard = document.querySelector(".enemy-board");
 const previewBoard = document.querySelector(".preview-board");
 const playAgain = document.querySelector(".play-again");
+const randomize = document.querySelector("#randomize-board");
+const reset = document.querySelector("#reset-board");
 let draggedShip;
 let game = new Game();
 // Initialize the board to place the ships
-display.render({ board: game.playerOne.gameboard, className: "preview-board" });
+display.render({
+  board: game.playerOne.getBoard(),
+  className: "preview-board",
+});
 
 startGame.addEventListener("click", () =>
   display.startGame(
-    { board: game.playerOne.gameboard, className: "player-board" },
-    { board: game.playerTwo.gameboard, className: "enemy-board" }
+    { board: game.playerOne.getBoard(), className: "player-board" },
+    { board: game.playerTwo.getBoard(), className: "enemy-board" }
   )
 );
 
 // Listen for player attacking enemy board
 enemyBoard.addEventListener("click", (e) => {
   const { playerOne, playerTwo } = game;
+  const playerOneBoard = playerOne.getBoard();
+  const playerTwoBoard = playerTwo.getBoard();
   // if already marked
   if (e.target.classList.length > 1) return;
 
@@ -29,24 +36,24 @@ enemyBoard.addEventListener("click", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
 
   playerOne.attack(playerTwo, x, y);
-  display.renderBoard(playerTwo.gameboard, "enemy-board");
+  display.renderBoard(playerTwoBoard, "enemy-board");
 
-  if (playerTwo.gameboard.isGameOver()) {
+  if (playerTwoBoard.isGameOver()) {
     display.endGame("You won");
     return;
   }
 
   // AI Move
   playerTwo.makeRandomMove(playerOne);
-  display.renderBoard(playerOne.gameboard, "player-board");
+  display.renderBoard(playerOneBoard, "player-board");
 
-  if (playerOne.gameboard.isGameOver()) display.endGame("You lost");
+  if (playerOneBoard.isGameOver()) display.endGame("You lost");
 });
 
 // Drag and drop ships
 previewBoard.addEventListener("drop", (e) => {
   e.preventDefault();
-  const { playerOne } = game;
+  const playerOneBoard = game.playerOne.getBoard();
   e.target.classList.remove("drag-over");
   e.target.classList.remove("invalid");
 
@@ -55,9 +62,9 @@ previewBoard.addEventListener("drop", (e) => {
   const isVertical = draggedShip.dataset.vertical === "true";
   const { length } = draggedShip.children;
 
-  if (!playerOne.gameboard.isValidPosition(length, x, y, isVertical)) return;
-  playerOne.gameboard.placeShip(length, x, y, isVertical);
-  display.renderBoard(playerOne.gameboard, "preview-board");
+  if (!playerOneBoard.isValidPosition(length, x, y, isVertical)) return;
+  playerOneBoard.placeShip(length, x, y, isVertical);
+  display.renderBoard(playerOneBoard, "preview-board");
 
   draggedShip.parentNode.classList.add("hidden");
   // if all ships are placed, let player start the game
@@ -71,9 +78,9 @@ previewBoard.addEventListener("dragover", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
   const { length } = draggedShip.children;
   const isVertical = draggedShip.dataset.vertical === "true";
-  const { gameboard } = game.playerOne;
+  const playerOneBoard = game.playerOne.getBoard();
 
-  if (!gameboard.isValidPosition(length, x, y, isVertical)) {
+  if (!playerOneBoard.isValidPosition(length, x, y, isVertical)) {
     e.target.classList.add("invalid");
     return;
   }
@@ -117,8 +124,33 @@ playAgain.addEventListener("click", () => {
   game = new Game();
   startGame.disabled = true;
   display.restart(
-    { board: game.playerOne.gameboard, className: "preview-board" },
-    { board: game.playerOne.gameboard, className: "player-board" },
-    { board: game.playerTwo.gameboard, className: "enemy-board" }
+    { board: game.playerOne.getBoard(), className: "preview-board" },
+    { board: game.playerOne.getBoard(), className: "player-board" },
+    { board: game.playerTwo.getBoard(), className: "enemy-board" }
   );
+});
+
+randomize.addEventListener("click", () => {
+  display.toggleShips(false);
+
+  game.playerOne.createNewBoard();
+  const playerOneBoard = game.playerOne.getBoard();
+  playerOneBoard.randomizeShips(
+    { length: 5 },
+    { length: 4 },
+    { length: 3 },
+    { length: 3 },
+    { length: 2 }
+  );
+  display.renderBoard(playerOneBoard, "preview-board");
+  startGame.disabled = false;
+});
+
+reset.addEventListener("click", () => {
+  display.toggleShips(true);
+
+  game.playerOne.createNewBoard();
+
+  display.renderBoard(game.playerOne.getBoard(), "preview-board");
+  startGame.disabled = true;
 });
