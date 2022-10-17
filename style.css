@@ -19,7 +19,7 @@ body {
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
-  --block-size: 40px;
+  --block-size: 38px;
   background-color: #e5e7eb;
 }
 
@@ -79,8 +79,7 @@ main {
 
 .board {
   display: grid;
-  grid-template: repeat(10, 1fr) / repeat(10, 1fr);
-  background-color: #f0f0f0;
+  grid-template: repeat(10, 0fr) / repeat(10, 0fr);
 }
 
 .square {
@@ -201,6 +200,7 @@ main {
 
 .place-ship-modal {
   background-color: #e5e7eb;
+  position: static;
 }
 
 .place-ship-modal > .modal-content {
@@ -224,8 +224,7 @@ main {
   flex-direction: column;
   overflow: auto;
   max-height: 400px;
-  width: 250px;
-
+  width: calc(var(--block-size) * 10px);
   gap: 22px;
   padding: 12px 0;
 }
