@@ -5,16 +5,21 @@ const display = displayController();
 const ships = document.querySelectorAll(".ship");
 const startGame = document.querySelector("#start-game");
 const enemyBoard = document.querySelector(".enemy-board");
-const playerBoard = document.querySelector(".player-board");
+const previewBoard = document.querySelector(".preview-board");
 const playAgain = document.querySelector(".play-again");
 let draggedShip;
 let game = new Game();
-display.render(game.playerOne.gameboard, game.playerTwo.gameboard);
-startGame.addEventListener("click", () => {
-  startGame.disabled = true;
-  enemyBoard.classList.add("active");
-});
+// Initialize the board to place the ships
+display.render({ board: game.playerOne.gameboard, className: "preview-board" });
 
+startGame.addEventListener("click", () =>
+  display.startGame(
+    { board: game.playerOne.gameboard, className: "player-board" },
+    { board: game.playerTwo.gameboard, className: "enemy-board" }
+  )
+);
+
+// Listen for player attacking enemy board
 enemyBoard.addEventListener("click", (e) => {
   const { playerOne, playerTwo } = game;
   // if already marked
@@ -24,21 +29,24 @@ enemyBoard.addEventListener("click", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
 
   playerOne.attack(playerTwo, x, y);
-  display.renderBoard(playerTwo.gameboard, 1);
+  display.renderBoard(playerTwo.gameboard, "enemy-board");
+
   if (playerTwo.gameboard.isGameOver()) {
-    display.endGame(true);
+    display.endGame("You won");
     return;
   }
-  // make ai move after player move
+
+  // AI Move
   playerTwo.makeRandomMove(playerOne);
-  display.renderBoard(playerOne.gameboard, 0);
-  if (playerOne.gameboard.isGameOver()) display.endGame(false);
+  display.renderBoard(playerOne.gameboard, "player-board");
+
+  if (playerOne.gameboard.isGameOver()) display.endGame("You lost");
 });
 
 // Drag and drop ships
-playerBoard.addEventListener("drop", (e) => {
+previewBoard.addEventListener("drop", (e) => {
   e.preventDefault();
-  const { playerOne, playerTwo } = game;
+  const { playerOne } = game;
   e.target.classList.remove("drag-over");
   e.target.classList.remove("invalid");
 
@@ -46,19 +54,18 @@ playerBoard.addEventListener("drop", (e) => {
   const y = +e.target.getAttribute("data-coord-y");
   const isVertical = draggedShip.dataset.vertical === "true";
   const { length } = draggedShip.children;
+
   if (!playerOne.gameboard.isValidPosition(length, x, y, isVertical)) return;
-
   playerOne.gameboard.placeShip(length, x, y, isVertical);
-  display.render(playerOne.gameboard, playerTwo.gameboard);
-  draggedShip.parentNode.classList.add("hidden");
+  display.renderBoard(playerOne.gameboard, "preview-board");
 
-  // check if all ships are placed
-  if (!document.querySelector(".ship-container:not(.hidden)")) {
+  draggedShip.parentNode.classList.add("hidden");
+  // if all ships are placed, let player start the game
+  if (!document.querySelector(".ship-container:not(.hidden)"))
     startGame.disabled = false;
-  }
 });
 
-playerBoard.addEventListener("dragover", (e) => {
+previewBoard.addEventListener("dragover", (e) => {
   e.preventDefault();
   const x = +e.target.getAttribute("data-coord-x");
   const y = +e.target.getAttribute("data-coord-y");
@@ -85,11 +92,11 @@ playerBoard.addEventListener("dragover", (e) => {
   }
 });
 
-playerBoard.addEventListener("dragleave", (e) => {
+previewBoard.addEventListener("dragleave", (e) => {
   e.preventDefault();
+  e.target.classList.remove("invalid");
   const dragOver = document.getElementsByClassName("preview-ship");
   [...dragOver].forEach((square) => square.classList.remove("preview-ship"));
-  e.target.classList.remove("invalid");
 });
 
 ships.forEach((ship) =>
@@ -108,5 +115,10 @@ rotateBtns.forEach((rotateBtn) =>
 
 playAgain.addEventListener("click", () => {
   game = new Game();
-  display.restart(game.playerOne.gameboard, game.playerTwo.gameboard);
+  startGame.disabled = true;
+  display.restart(
+    { board: game.playerOne.gameboard, className: "preview-board" },
+    { board: game.playerOne.gameboard, className: "player-board" },
+    { board: game.playerTwo.gameboard, className: "enemy-board" }
+  );
 });

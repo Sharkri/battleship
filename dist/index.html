@@ -16,10 +16,10 @@
         <button class="play-again">Play again?</button>
       </div>
     </div>
-    <main>
-      <div class="boards">
-        <div class="player-board-container">
-          <div class="board player-board"></div>
+    <div class="place-ship-modal open">
+      <div class="modal-content">
+        <div class="board-container">
+          <div class="board preview-board"></div>
           <div class="ships">
             <div class="ship-container">
               <div
@@ -37,7 +37,6 @@
                 />
               </svg>
             </div>
-
             <div class="ship-container">
               <div
                 class="submarine ship"
@@ -55,7 +54,6 @@
                 />
               </svg>
             </div>
-
             <div class="ship-container">
               <div class="cruiser ship" draggable="true" data-vertical="false">
                 <div class="part"></div>
@@ -105,7 +103,13 @@
           </div>
         </div>
         <button id="start-game" disabled>Start Game</button>
-
+      </div>
+    </div>
+    <main>
+      <div class="boards">
+        <div class="player-board-container">
+          <div class="board player-board"></div>
+        </div>
         <div class="board enemy-board"></div>
       </div>
     </main>

@@ -1,11 +1,13 @@
 export default function displayController() {
-  const boards = document.querySelectorAll(".board");
-  const modal = document.querySelector(".modal");
+  const gameEndedModal = document.querySelector(".modal");
   const enemyBoard = document.querySelector(".enemy-board");
   const gameEndedText = document.querySelector(".game-ended-text");
-  function renderBoard(board, boardIndex) {
+  const placeShipModal = document.querySelector(".place-ship-modal");
+
+  function renderBoard(board, className) {
+    const domBoard = document.querySelector(`.${className}`);
     // Clear the board
-    boards[boardIndex].textContent = "";
+    domBoard.textContent = "";
     for (let y = 0; y < 10; y += 1)
       for (let x = 0; x < 10; x += 1) {
         const square = document.createElement("button");
@@ -17,37 +19,44 @@ export default function displayController() {
         if (board.isMiss(x, y)) square.classList.add("missed");
 
         const ship = board.at(x, y);
-        // Only show the ship if it's on the players board
-        if (ship && boardIndex === 0) square.classList.add("ship");
+        // Only show the ship if it's not on the enemy's board
+        if (ship && className !== "enemy-board") square.classList.add("ship");
         if (ship?.isSunk()) square.classList.add("sunk");
 
-        boards[boardIndex].appendChild(square);
+        domBoard.appendChild(square);
       }
   }
 
-  function render(...gameboards) {
-    for (let i = 0; i < gameboards.length; i += 1) {
-      renderBoard(gameboards[i], i);
-    }
+  function render(...players) {
+    players.forEach((player) => renderBoard(player.board, player.className));
   }
 
-  function restart(...gameboards) {
-    render(...gameboards);
-    // unhide the ships to place on board
+  function restart(...players) {
+    render(...players);
     const hiddenShips = document.querySelectorAll(".hidden");
     hiddenShips.forEach((ship) => {
-      // by default ship is horizontal
+      // Set ship to horizontal by default.
       ship.firstElementChild.setAttribute("data-vertical", "false");
+      // Unhide the ship
       ship.classList.remove("hidden");
-      modal.classList.remove("open");
-      enemyBoard.classList.remove("active");
     });
+
+    enemyBoard.classList.remove("active");
+    gameEndedModal.classList.remove("open");
+    placeShipModal.classList.add("open");
   }
 
-  function endGame(isWin) {
-    modal.classList.add("open");
-    gameEndedText.textContent = isWin ? "You won" : "You lost";
+  function startGame(...players) {
+    render(...players);
+
+    enemyBoard.classList.add("active");
+    placeShipModal.classList.remove("open");
   }
 
-  return { render, renderBoard, restart, endGame };
+  function endGame(text) {
+    gameEndedModal.classList.add("open");
+    gameEndedText.textContent = text;
+  }
+
+  return { render, renderBoard, restart, endGame, startGame };
 }
