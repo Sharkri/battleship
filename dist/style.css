@@ -200,7 +200,6 @@ main {
 
 .place-ship-modal {
   background-color: #e5e7eb;
-  position: static;
 }
 
 .place-ship-modal > .modal-content {
