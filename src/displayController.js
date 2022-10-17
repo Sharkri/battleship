@@ -1,6 +1,5 @@
 export default function displayController() {
   const gameEndedModal = document.querySelector(".modal");
-  const enemyBoard = document.querySelector(".enemy-board");
   const gameEndedText = document.querySelector(".game-ended-text");
   const placeShipModal = document.querySelector(".place-ship-modal");
 
@@ -40,16 +39,12 @@ export default function displayController() {
       // Unhide the ship
       ship.classList.remove("hidden");
     });
-
-    enemyBoard.classList.remove("active");
     gameEndedModal.classList.remove("open");
     placeShipModal.classList.add("open");
   }
 
   function startGame(...players) {
     render(...players);
-
-    enemyBoard.classList.add("active");
     placeShipModal.classList.remove("open");
   }
 
