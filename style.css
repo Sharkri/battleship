@@ -45,18 +45,23 @@ main {
   flex-direction: column;
 }
 
-#start-game {
-  padding: 12px;
-  border-radius: 10px;
-  cursor: pointer;
+.buttons {
+  margin-top: 24px;
+  display: flex;
+  gap: 18px;
 }
 
-#start-game:not(:disabled):hover {
-  background-color: #dddddd;
+#start-game {
+  border: none;
+  background-color: #0ea5e9;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
 }
 
 #start-game:disabled {
   cursor: not-allowed;
+  filter: grayscale(50%);
 }
 
 .boards {
@@ -93,24 +98,13 @@ main {
 .square {
   width: var(--block-size);
   height: var(--block-size);
-  border: 1px solid rgb(31, 43, 68);
+  border: 2px solid rgb(31, 43, 68);
   display: grid;
   place-items: center;
   transition: all 0.2s ease;
 }
 
-.enemy-board:not(.active) {
-  filter: blur(1.5px);
-  cursor: not-allowed;
-}
-
-.enemy-board:not(.active) > .square {
-  pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.45);
-  border-color: rgba(31, 43, 68, 0.6);
-}
-
-.enemy-board.active > .square:not(.hit, .missed) {
+.enemy-board > .square:not(.hit, .missed) {
   cursor: crosshair;
 }
 
@@ -155,7 +149,6 @@ main {
 
 .square.invalid {
   background-color: #dc262d;
-  border: 1px solid black;
 }
 
 .header {
